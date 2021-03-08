@@ -19,13 +19,12 @@ RUN cd MutPanningV2 && \
 
 # MutPanning preprocessing/run sh
 RUN mkdir /root/MutPanning_result
-ADD run_mutpanning.sh /root/run_mutpanning.sh
+ADD run_mutpanning_all.sh /root/run_mutpanning_all.sh
+ADD run_mutpanning_type.sh /root/run_mutpanning_type.sh
 ADD pre_mutpanning.sh /root/pre_mutpanning.sh
-RUN chmod 777 /root/run_mutpanning.sh
+RUN chmod 777 /root/run_mutpanning_all.sh
+RUN chmod 777 /root/run_mutpanning_type.sh
 RUN chmod 777 /root/pre_mutpanning.sh
-
-ADD run_mutpanning.sh /root/run_mutpanning.sh
-RUN chmod 777 /root/run_mutpanning.sh
 
 # Entory Point
 ADD entry-point.sh /usr/local/bin/entry-point.sh
