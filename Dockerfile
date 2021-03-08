@@ -22,6 +22,7 @@ RUN mkdir /root/MutPanning_result
 ADD run_mutpanning_all.sh /root/run_mutpanning_all.sh
 ADD run_mutpanning_type.sh /root/run_mutpanning_type.sh
 ADD pre_mutpanning.sh /root/pre_mutpanning.sh
+
 RUN chmod 777 /root/run_mutpanning_all.sh
 RUN chmod 777 /root/run_mutpanning_type.sh
 RUN chmod 777 /root/pre_mutpanning.sh
