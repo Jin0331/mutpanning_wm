@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/ls
 
 read -p "study_name insert : " study_name
 #cd /root/mutpanning/mutpanning_data/${study_name}

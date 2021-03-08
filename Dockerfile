@@ -18,6 +18,7 @@ RUN cd MutPanningV2 && \
 
 
 # MutPanning preprocessing/run sh
+RUN mkdir /root/MutPanning_result
 ADD run_mutpanning.sh /root/run_mutpanning.sh
 ADD pre_mutpanning.sh /root/pre_mutpanning.sh
 RUN chmod 777 /root/run_mutpanning.sh
