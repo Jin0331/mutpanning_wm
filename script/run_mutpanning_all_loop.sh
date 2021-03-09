@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+# 100 time, run Mutpanning
 for var in {1..100..1}
 do
     study_name="ALL"
