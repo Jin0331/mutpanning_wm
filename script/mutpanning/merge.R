@@ -9,7 +9,7 @@ setwd(root_path)
 # variable
 result_list <-  list()
 min_max_flag <- "min"
-core_value <- 28
+core_value <- 25
 suc_count <- 1
 #detectCores()
 

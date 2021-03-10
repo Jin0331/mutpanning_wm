@@ -36,8 +36,8 @@ RUN pip3 install jupyter && jupyter notebook --generate-config  && \
     echo "c.NotebookApp.allow_root = True" >> ~/.jupyter/jupyter_notebook_config.py
 
 # python jupyter lab && python3 venv
-RUN apt-get update && apt-get install python3-venv && \
-    pip3 install -y jupyterlab virtualenv
+RUN apt-get update && apt-get install python3-venv -y && \
+    pip3 install jupyterlab virtualenv
 
 # git clone MutPanningV2
 RUN git clone https://github.com/vanallenlab/MutPanningV2.git
@@ -50,26 +50,36 @@ RUN unzip /root/Hg19.zip \
 RUN cd MutPanningV2 && \
     javac -classpath commons-math3-3.6.1.jar:jdistlib-0.4.5-bin.jar *.java
 
+# Mutagene
+RUN pip3 install mutagene && \
+    mutagene fetch cohorts && \
+    mutagene fetch examples && \
+    mutagene fetch genome -g hg19
+
+
 # timezone 
 # https://blog.hangyeong.com/1013
 
-# MutPanning preprocessing/run sh
-RUN mkdir /root/MutPanning_result
-ADD run_mutpanning_all.sh /root/run_mutpanning_all.sh
-ADD run_mutpanning_type.sh /root/run_mutpanning_type.sh
-ADD pre_mutpanning.sh /root/pre_mutpanning.sh
+# result dir create
+RUN mkdir /root/mutpanning_result /root/mutagene_result
+RUN mkdir -p /root/mutagene_preprocessing/
 
-RUN chmod 777 /root/run_mutpanning_all.sh && \
-    chmod 777 /root/run_mutpanning_type.sh && \
-    chmod 777 /root/pre_mutpanning.sh
+# script copy
+ADD script/mutpanning/run_mutpanning_all_loop.sh /root/mutpanning_script/run_mutpanning_all_loop.sh
+ADD script/mutpanning/run_mutpanning_type.sh /root/mutpanning_script/run_mutpanning_type.sh
+ADD script/mutpanning/pre_mutpanning.sh /root/mutpanning_script/pre_mutpanning.sh
+
+ADD script/mutagene/mutagene_input_preprocessing.py /root/mutagene_script/mutagene_input_preprocessing.py
+
+RUN chmod -R 777 /root/mutpanning_script
+RUN chmod -R 777 /root/mutagene_script
 
 # Mutagene
 RUN python3 -m venv env_mutagene && \
-    source env_mutagene/bin/activate && \
-    pip3 install mutagene
+    pip3 install pandas
 
 # Entory Point
-ADD entry-point.sh /usr/local/bin/entry-point.sh
+ADD script/entry-point.sh /usr/local/bin/entry-point.sh
 RUN chmod 777 /usr/local/bin/entry-point.sh
 
 EXPOSE 8888 22
