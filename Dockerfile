@@ -51,11 +51,7 @@ RUN cd MutPanningV2 && \
     javac -classpath commons-math3-3.6.1.jar:jdistlib-0.4.5-bin.jar *.java
 
 # Mutagene
-RUN pip3 install mutagene && \
-    mutagene fetch cohorts && \
-    mutagene fetch examples && \
-    mutagene fetch genome -g hg19
-
+RUN pip3 install mutagene
 
 # timezone 
 # https://blog.hangyeong.com/1013
@@ -75,8 +71,10 @@ RUN chmod -R 777 /root/mutpanning_script
 RUN chmod -R 777 /root/mutagene_script
 
 # Mutagene
-RUN python3 -m venv env_mutagene && \
-    pip3 install pandas
+RUN /bin/bash -c "python3 -m venv env_mutagene && \
+    source env_mutagene/bin/activate && \
+    pip3 install pandas && \
+    pip3 install mutagene"
 
 # Entory Point
 ADD script/entry-point.sh /usr/local/bin/entry-point.sh
