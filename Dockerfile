@@ -21,6 +21,9 @@ RUN rm -f /etc/ssh/ssh_host_dsa_key /etc/ssh/ssh_host_rsa_key /root/.ssh/id_rsa 
 RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config \
  && sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
+# install R 3.6.3
+RUN apt-get update && apt-get install -y r-base r-base-dev
+
 # install Python 3.7
 RUN apt-add-repository -r ppa:armagetronad-dev/ppa \
     && apt-get update -q && apt-get install -y build-essential libpq-dev libssl-dev openssl libffi-dev zlib1g-dev python3-pip python3.7-dev python3.7 \
@@ -34,6 +37,10 @@ RUN pip3 install jupyter && jupyter notebook --generate-config  && \
     echo "c.NotebookApp.ip='*'" >> ~/.jupyter/jupyter_notebook_config.py && \
     echo "c.NotebookApp.open_browser = False" >> ~/.jupyter/jupyter_notebook_config.py && \
     echo "c.NotebookApp.allow_root = True" >> ~/.jupyter/jupyter_notebook_config.py
+
+# R kernel for jupyter
+RUN Rscript -e 'install.packages(c("tidyverse", "IRkernel"))' && \
+    Rscript -e 'IRkernel::installspec(user = FALSE)'
 
 # python jupyter lab && python3 venv
 RUN apt-get update && apt-get install python3-venv -y && \
@@ -75,6 +82,13 @@ RUN /bin/bash -c "python3 -m venv env_mutagene && \
     source env_mutagene/bin/activate && \
     pip3 install pandas && \
     pip3 install mutagene"
+
+RUN /bin/bash -c "source env_mutagene/bin/activate && \
+    mutagene fetch cohorts && \
+    mutagene fetch examples && \
+    mutagene fetch genome -g hg19"
+
+
 
 # Entory Point
 ADD script/entry-point.sh /usr/local/bin/entry-point.sh

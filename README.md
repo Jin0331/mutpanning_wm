@@ -29,10 +29,8 @@ docker run -dit -v /home/wmbio/data/mutpanning/data:/root/mutpanning_data -v /ho
 
 ### **run mutagene - Calculating mutational profile with MutaGene and applying it to mutation ranking**
 
-``` 
-mutagene fetch cohorts
-mutagene fetch examples
-mutagene fetch genome -g hg19
+```
+python3 mutagene_input_preprocessing.py
 ```
 
 ```
