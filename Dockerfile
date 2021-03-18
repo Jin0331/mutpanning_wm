@@ -22,7 +22,7 @@ RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_confi
  && sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
 # install R 3.6.3
-RUN apt-get update && apt-get install -y r-base r-base-dev
+RUN apt-get update && apt-get install -y r-base r-base-dev libxml2-dev libcurl4-openssl-dev
 
 # install Python 3.7
 RUN apt-add-repository -r ppa:armagetronad-dev/ppa \
@@ -39,7 +39,7 @@ RUN pip3 install jupyter && jupyter notebook --generate-config  && \
     echo "c.NotebookApp.allow_root = True" >> ~/.jupyter/jupyter_notebook_config.py
 
 # R kernel for jupyter
-RUN Rscript -e 'install.packages(c("tidyverse", "IRkernel"))' && \
+RUN Rscript -e 'install.packages(c("tidyverse", "data.table", "IRkernel"))' && \
     Rscript -e 'IRkernel::installspec(user = FALSE)'
 
 # python jupyter lab && python3 venv
@@ -66,6 +66,7 @@ RUN pip3 install mutagene
 # result dir create
 RUN mkdir /root/mutpanning_result /root/mutagene_result
 RUN mkdir -p /root/mutagene_preprocessing/
+ADD mutagene_cohort.txt /root/mutagene_preprocessing/mutagene_cohort.txt
 
 # script copy
 ADD script/mutpanning/run_mutpanning_all_loop.sh /root/mutpanning_script/run_mutpanning_all_loop.sh
