@@ -57,7 +57,7 @@ RUN unzip /root/Hg19.zip \
 RUN cd MutPanningV2 && \
     javac -classpath commons-math3-3.6.1.jar:jdistlib-0.4.5-bin.jar *.java
 
-# Mutagene
+# Mutagene & input preprocessing 
 RUN pip3 install mutagene
 
 # timezone 
@@ -74,6 +74,7 @@ ADD script/mutpanning/run_mutpanning_type.sh /root/mutpanning_script/run_mutpann
 ADD script/mutpanning/pre_mutpanning.sh /root/mutpanning_script/pre_mutpanning.sh
 
 ADD script/mutagene/mutagene_input_preprocessing.py /root/mutagene_script/mutagene_input_preprocessing.py
+ADD script/mutagene/mutagene_run.R /root/mutagene_script/mutagene_run.py
 
 RUN chmod -R 777 /root/mutpanning_script
 RUN chmod -R 777 /root/mutagene_script
